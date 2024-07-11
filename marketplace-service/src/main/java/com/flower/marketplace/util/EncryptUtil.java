@@ -7,6 +7,8 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -20,21 +22,14 @@ public class EncryptUtil {
     private SecretKey secretKey;
     private IvParameterSpec ivParameterSpec;
 
+    private final String secretKeyKey = "Zmxvd2VyX2tleQ=="; //flower_key
+    private final String ivKey = "Zmxvd2VyX2tleQ==";
+
     public EncryptUtil() throws Exception {
-        this.secretKey = generateSecretKey();
-        this.ivParameterSpec = generateIv();
-    }
-
-    private SecretKey generateSecretKey() throws Exception {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance(ALGORITHM);
-        keyGenerator.init(KEY_SIZE);
-        return keyGenerator.generateKey();
-    }
-
-    private IvParameterSpec generateIv() {
-        byte[] iv = new byte[IV_SIZE];
-        new SecureRandom().nextBytes(iv);
-        return new IvParameterSpec(iv);
+        byte[] secretKeyBytes = this.secretKeyKey.getBytes(StandardCharsets.UTF_8);
+        byte[] ivBytes = this.ivKey.getBytes(StandardCharsets.UTF_8);
+        this.secretKey = new SecretKeySpec(secretKeyBytes, ALGORITHM);
+        this.ivParameterSpec = new IvParameterSpec(ivBytes);
     }
 
     public String encrypt(byte[] data) throws Exception {
