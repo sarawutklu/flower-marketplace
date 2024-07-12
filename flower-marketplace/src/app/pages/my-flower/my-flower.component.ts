@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FlowerService } from '../../_services/flower.service';
+import { AnalyticsService } from '../../_services/analytics.service';
 
 @Component({
   selector: 'app-my-flower',
@@ -10,9 +11,10 @@ export class MyFlowerComponent implements OnInit {
   newFlower = { name: 'flower test 1', description: 'flower test 1', price: 999 };
   flowers: any[] = [];
   imagesPopUp = null
-  constructor(private flowerService: FlowerService) { }
+  constructor(private flowerService: FlowerService, private analyticsService:AnalyticsService) { }
 
   ngOnInit() {
+    this.analyticsService.trackEvent('myflower', 'myflower loaded into view', 'VIEW_PAGE')
     this.getFlowers();
   }
 
