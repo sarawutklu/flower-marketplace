@@ -12,6 +12,10 @@ import com.flower.marketplace.util.EncryptUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,14 +38,26 @@ public class FlowerService {
         this.flowerRepository = flowerRepository;
         this.flowerImageRepository = flowerImageRepository;
     }
+     private String currentUserNanme() {
+         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         String username = null;
+         if (authentication instanceof JwtAuthenticationToken) {
+             JwtAuthenticationToken jwtToken = (JwtAuthenticationToken) authentication;
+             Jwt jwt = jwtToken.getToken();
+             // Retrieve preferred_username claim
+             username = jwt.getClaim("preferred_username");
+         }
 
-    public List<FlowerDTO> getFlowersByCreatedBy(String createdBy) {
+         return username;
+     }
+    public List<FlowerDTO> getMyFlowers() {
         try {
-            logger.info("Fetching all flowers created by: {}", createdBy);
-            List<Flower> flowers = flowerRepository.findByCreatedBy(createdBy);
+            String userName = currentUserNanme();
+            logger.info("Fetching all flowers created by: {}", userName);
+            List<Flower> flowers = flowerRepository.findByCreatedBy(userName);
             return flowers.stream().map(this::convertToDTO).collect(Collectors.toList());
         } catch (Exception e) {
-            logger.error("Error occurred while fetching flowers created by: {}", createdBy, e);
+            logger.error("Error occurred while fetching flowers", e);
             throw new RuntimeException("Failed to fetch flowers: " + e.getMessage());
         }
     }
@@ -53,9 +69,9 @@ public class FlowerService {
             flower.setDescription(request.getDescription());
             flower.setPrice(request.getPrice());
             flower.setCreatedDate(LocalDateTime.now());
-            flower.setCreatedBy("System");
+            flower.setCreatedBy(currentUserNanme());
             flower.setModifiedDate(LocalDateTime.now());
-            flower.setModifiedBy("System");
+            flower.setModifiedBy(currentUserNanme());
             Flower savedFlower = flowerRepository.save(flower);
             logger.info("Saved flower with ID: {}", savedFlower.getId());
             return convertToDTO(savedFlower);
@@ -70,13 +86,13 @@ public class FlowerService {
     public FlowerDTO updateFlower(Long id, FlowerUpdateDTO flowerUpdateDTO) {
         Flower flower = flowerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Flower not found with id: " + id));
-        if (!flower.getCreatedBy().equals("System")) {
+        if (!flower.getCreatedBy().equals(currentUserNanme())) {
             throw new RuntimeException("You are not authorized to delete this flower");
         }
         flower.setName(flowerUpdateDTO.getName());
         flower.setDescription(flowerUpdateDTO.getDescription());
         flower.setPrice(flowerUpdateDTO.getPrice());
-        flower.setModifiedBy("System");
+        flower.setModifiedBy(currentUserNanme());
         flower.setModifiedDate(LocalDateTime.now());
         flower = flowerRepository.save(flower);
         return convertToDTO(flower);
@@ -87,7 +103,7 @@ public class FlowerService {
         try {
             Flower flower = flowerRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Flower not found with id: " + id));
-            if (!flower.getCreatedBy().equals("System")) {
+            if (!flower.getCreatedBy().equals(currentUserNanme())) {
                 throw new RuntimeException("You are not authorized to delete this flower");
             }
             flowerRepository.delete(flower);
@@ -100,6 +116,9 @@ public class FlowerService {
     @Transactional
     public FlowerImageDTO saveFlowerImage(Long flowerId, byte[] imageData) {
         try {
+            // Get current authenticated user
+
+
             logger.info("Saving new flower image for flower ID: {}", flowerId);
             FlowerImage flowerImage = new FlowerImage();
             flowerImage.setFlowerId(flowerId);

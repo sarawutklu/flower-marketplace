@@ -12,7 +12,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
     RouterOutlet,
     HeaderModule,
     UpdateFlowerModule,
-    MyFlowerModule
+    MyFlowerModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

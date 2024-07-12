@@ -1,8 +1,6 @@
 package com.flower.marketplace.controller;
 
 
-import com.flower.marketplace.entity.Flower;
-import com.flower.marketplace.entity.FlowerImage;
 import com.flower.marketplace.model.*;
 import com.flower.marketplace.service.FlowerService;
 import jakarta.validation.Valid;
@@ -30,10 +28,10 @@ public class FlowerController {
     }
 
     @GetMapping()
-    public ResponseEntity<ApiResponse<List<FlowerDTO>>> getMyFlowers(@RequestParam("createdBy") String createdBy) {
+    public ResponseEntity<ApiResponse<List<FlowerDTO>>> getMyFlowers() {
         try {
-            logger.info("Received request to get all flowers created by: {}", createdBy);
-            List<FlowerDTO> flowers = flowerService.getFlowersByCreatedBy(createdBy);
+            logger.info("Received request to get all flowers");
+            List<FlowerDTO> flowers = flowerService.getMyFlowers();
             ApiResponse<List<FlowerDTO>> response = new ApiResponse<>(
                     "Flowers retrieved successfully",
                     flowers,
@@ -42,7 +40,7 @@ public class FlowerController {
             );
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Failed to get flowers created by: {}", createdBy, e);
+            logger.error("Failed to get flowers", e);
             ApiResponse<List<FlowerDTO>> response = new ApiResponse<>(
                     "Failed to retrieve flowers",
                     null,

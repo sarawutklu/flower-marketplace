@@ -1,4 +1,4 @@
-package thetrade.api.config;
+package com.flower.marketplace.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.cors(Customizer.withDefaults())
                 .csrf(CsrfConfigurer::disable)
-                .authorizeHttpRequests(httpRequests -> httpRequests.anyRequest().authenticated())
+                .authorizeHttpRequests(httpRequests -> httpRequests
+                        .requestMatchers("/flowers/image/**").permitAll()
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(Customizer.withDefaults()))
                 .build();

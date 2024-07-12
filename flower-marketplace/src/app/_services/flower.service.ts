@@ -11,9 +11,8 @@ export class FlowerService {
 
   constructor(private http: HttpClient) { }
 
-  getFlowers(createdBy: string): Observable<any> {
-    const params = new HttpParams().set('createdBy', createdBy);
-    return this.http.get(`${this.apiUrl}/flowers`, { params });
+  getFlowers(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/flowers`);
   }
 
   createFlower(flower: any): Observable<any> {
