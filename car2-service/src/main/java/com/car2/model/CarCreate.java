@@ -19,4 +19,9 @@ public class CarCreate {
     @Positive
     private double price;
 
+    private String make;
+    private String model;
+    private int year;
+    private String color;
+
 }

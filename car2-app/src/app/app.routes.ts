@@ -3,18 +3,18 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     {
         path: '',
-        loadChildren: () => import('./pages/my-flower/my-flower.module').then(mod => mod.MyFlowerModule)
+        loadChildren: () => import('./pages/my-cars/my-car.module').then(mod => mod.MyCarModule)
     },
     {
         path: 'flowers/:username',
-        loadChildren: () => import('./pages/flowers/flowers.module').then(mod => mod.FlowersModule)
+        loadChildren: () => import('./pages/cars/cars.module').then(mod => mod.CarsModule)
     },
     {
         path: 'add-flower',
-        loadChildren: () => import('./pages/update-flower/update-flower.module').then(mod => mod.UpdateFlowerModule)
+        loadChildren: () => import('./pages/update-car/update-car.module').then(mod => mod.UpdateCarModule)
     },
     {
         path: 'update-flower/:id',
-        loadChildren: () => import('./pages/update-flower/update-flower.module').then(mod => mod.UpdateFlowerModule)
+        loadChildren: () => import('./pages/update-car/update-car.module').then(mod => mod.UpdateCarModule)
     }
 ];

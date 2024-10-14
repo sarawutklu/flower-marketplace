@@ -22,6 +22,14 @@ public class Car {
     private String description;
     @Column(name = "price", nullable = false)
     private double price;
+    @Column(name = "make", nullable = false)
+    private String make;
+    @Column(name = "model", nullable = false)
+    private String model;
+    @Column(name = "year", nullable = false)
+    private int year;
+    @Column(name = "color", nullable = false)
+    private String color;
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
     @Column(name = "created_by", nullable = false)

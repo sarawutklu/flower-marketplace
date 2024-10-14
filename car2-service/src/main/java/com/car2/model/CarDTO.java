@@ -14,5 +14,11 @@ public class CarDTO {
     private String description;
     @NotBlank
     private double price;
+
+    private String make;
+    private String model;
+    private int year;
+    private String color;
+
     private List<CarImageDTO> images;
 }

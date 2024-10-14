@@ -126,7 +126,7 @@ public class CarController {
         }
     }
 
-    @PostMapping("/{flowerId}/images")
+    @PostMapping("/{carId}/images")
     public ResponseEntity<ApiResponse<Void>> uploadCarImages(@PathVariable Long carId,
                                                                   @RequestParam("images") List<MultipartFile> images) {
         try {

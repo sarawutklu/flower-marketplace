@@ -68,6 +68,10 @@ public class CarService {
             car.setName(request.getName());
             car.setDescription(request.getDescription());
             car.setPrice(request.getPrice());
+            car.setMake(request.getMake());
+            car.setModel(request.getModel());
+            car.setYear(request.getYear());
+            car.setColor(request.getColor());
             car.setCreatedDate(LocalDateTime.now());
             car.setCreatedBy(currentUserNanme());
             car.setModifiedDate(LocalDateTime.now());
@@ -92,6 +96,10 @@ public class CarService {
         car.setName(carUpdateDTO.getName());
         car.setDescription(carUpdateDTO.getDescription());
         car.setPrice(carUpdateDTO.getPrice());
+        car.setMake(carUpdateDTO.getMake());
+        car.setModel(carUpdateDTO.getModel());
+        car.setYear(carUpdateDTO.getYear());
+        car.setColor(carUpdateDTO.getColor());
         car.setModifiedBy(currentUserNanme());
         car.setModifiedDate(LocalDateTime.now());
         car = carRepository.save(car);
@@ -148,13 +156,17 @@ public class CarService {
         }
     }
 
-    private CarDTO convertToDTO(Car flower) {
+    private CarDTO convertToDTO(Car car) {
         CarDTO carDTO = new CarDTO();
-        carDTO.setId(flower.getId());
-        carDTO.setName(flower.getName());
-        carDTO.setDescription(flower.getDescription());
-        carDTO.setPrice(flower.getPrice());
-        carDTO.setImages(flower.getImages().stream().map(this::convertToImageDTO).collect(Collectors.toList()));
+        carDTO.setId(car.getId());
+        carDTO.setName(car.getName());
+        carDTO.setDescription(car.getDescription());
+        carDTO.setPrice(car.getPrice());
+        carDTO.setMake(car.getMake());
+        carDTO.setModel(car.getModel());
+        carDTO.setYear(car.getYear());
+        carDTO.setColor(car.getColor());
+        carDTO.setImages(car.getImages().stream().map(this::convertToImageDTO).collect(Collectors.toList()));
         return carDTO;
     }
 
