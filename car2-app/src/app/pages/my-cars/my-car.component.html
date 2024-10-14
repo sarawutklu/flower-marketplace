@@ -1,0 +1,43 @@
+<section class="bg-white">
+  <div class="container px-6 py-10 mx-auto">
+    <h1 class="text-2xl font-semibold text-center text-gray-800 capitalize lg:text-3xl ">My Cars</h1>
+    <div class="text-right ">
+      <button type="button" routerLink="/add-flower"
+        class="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none">
+        + New Car
+      </button>
+    </div>
+    <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 lg:grid-cols-4">
+      <div *ngFor="let item of flowers" (click)="handleImagesPopUp(item)"
+        class="flex items-end cursor-pointer overflow-hidden bg-cover rounded-lg h-96"
+        style="background-image:url('http://localhost:8080/cars/image/{{item?.images[0]?.id}}')">
+        <div class="w-full px-8 py-4 overflow-hidden rounded-b-lg backdrop-blur-sm bg-white/60 ">
+          <h2 class="mt-4 text-xl font-semibold text-gray-800 capitalize">Name : {{item.name}}</h2>
+          <p class="mt-2 text-lg tracking-wider text-gray-800 uppercase">{{item.description}}</p>
+          <p class="mt-2 text-lg tracking-wider text-[#6A64F1] uppercase">Price : ฿{{item.price}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div *ngIf="imagesPopUp" class="min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 
+  flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover"
+  id="modal-id">
+  <div class="absolute bg-black opacity-80 inset-0 z-0"></div>
+  <div class="w-full max-w-5xl p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
+    <div class="">
+      <div class="text-right mb-4">
+        <button type="button" (click)="imagesPopUp = null"
+          class="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none">
+          x
+        </button>
+      </div>
+      <div class="w-full grid gap-x-2 gap-y-2 grid-cols-3">
+      <div *ngFor="let item of imagesPopUp">
+        <img class="object-cover w-full h-full" src="http://localhost:8080/cars/image/{{item?.id}}" alt="">
+      </div>
+    </div>
+  </div>
+</div>
+</div>

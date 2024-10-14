@@ -1,0 +1,130 @@
+
+<div class="flex items-center justify-center p-12">
+  <div class="mx-auto w-full max-w-[550px]">
+    <h1 class="font-bold mb-4">Create Car</h1>
+    <form [formGroup]="carForm" (ngSubmit)="onSubmit()">
+      <div class="mb-5">
+        <label class="mb-3 block text-base font-medium text-[#07074D]" for="name">Name</label>
+        <input
+          class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          id="name" formControlName="name" placeholder="car name.">
+        <div class="text-red-400" *ngIf="name?.invalid && (name?.dirty || name?.touched)">
+          <div *ngIf="name?.errors?.['required']">
+            Name is required.
+          </div>
+          <div *ngIf="name?.errors?.['pattern']">
+            Name cannot be blank.
+          </div>
+        </div>
+      </div>
+     
+      <div class="mb-5">
+        <label for="description" class="mb-3 block text-base font-medium text-[#07074D]">
+          Description
+        </label>
+        <textarea rows="4" name="description" id="description" formControlName="description"
+          placeholder="Type car description"
+          class="w-full resize-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"></textarea>
+      </div>
+
+      <div class="mb-5">
+        <label class="mb-3 block text-base font-medium text-[#07074D]" for="price">Price</label>
+        <input
+          class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          id="price" formControlName="price" type="text" placeholder="car price.">
+        <div class="text-red-400" *ngIf="price?.invalid && (price?.dirty || price?.touched)">
+          <div *ngIf="price?.errors?.['required']">
+            Price is required.
+          </div>
+          <div *ngIf="price?.errors?.['min']">
+            Price must be greater than zero.
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <label class="mb-3 block text-base font-medium text-[#07074D]" for="make">Make</label>
+        <input
+          class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          id="make" formControlName="make" type="text" placeholder="Car make.">
+        <div class="text-red-400" *ngIf="make?.invalid && (make?.dirty || make?.touched)">
+          <div *ngIf="make?.errors?.['required']">
+            Make is required.
+          </div>
+          <div *ngIf="make?.errors?.['pattern']">
+            Make cannot be blank.
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <label class="mb-3 block text-base font-medium text-[#07074D]" for="model">Model</label>
+        <input
+          class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          id="model" formControlName="model" type="text" placeholder="Car model.">
+        <div class="text-red-400" *ngIf="model?.invalid && (model?.dirty || model?.touched)">
+          <div *ngIf="model?.errors?.['required']">
+            Model is required.
+          </div>
+          <div *ngIf="model?.errors?.['pattern']">
+            Model cannot be blank.
+          </div>
+        </div>
+      </div>
+
+
+      <div class="mb-5">
+        <label class="mb-3 block text-base font-medium text-[#07074D]" for="year">Year</label>
+        <input
+          class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          id="year" formControlName="year" type="text" placeholder="Car year.">
+        <div class="text-red-400" *ngIf="year?.invalid && (year?.dirty || year?.touched)">
+          <div *ngIf="year?.errors?.['required']">
+            Year is required.
+          </div>
+          <div *ngIf="year?.errors?.['pattern']">
+            Year cannot be blank.
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <label class="mb-3 block text-base font-medium text-[#07074D]" for="color">Color</label>
+        <input
+          class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          id="color" formControlName="color" type="text" placeholder="Car color.">
+        <div class="text-red-400" *ngIf="color?.invalid && (color?.dirty || color?.touched)">
+          <div *ngIf="color?.errors?.['required']">
+            Color is required.
+          </div>
+          <div *ngIf="color?.errors?.['pattern']">
+            Color cannot be blank.
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <label for="images" class="mb-3 block text-base font-medium text-[#07074D]">
+          Images
+        </label>
+        <input type="file" name="images" id="images" (change)="onImageUpload($event)" multiple>
+        <div class="flex flex-wrap mt-2">
+          <div *ngFor="let image of imagePreviews; let i = index" class="relative mr-2 mb-2">
+            <img [src]="image" alt="Image preview" class="h-20 w-20 object-cover rounded-md border border-[#e0e0e0]">
+            <button type="button" (click)="removeImage(i)"
+              class="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1">x</button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="created" class="text-green-400">
+        Created successfull
+      </div>
+      <div>
+        <button type="submit" [disabled]="carForm.invalid"
+          class="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
