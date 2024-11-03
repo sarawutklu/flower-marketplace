@@ -28,13 +28,15 @@ public class CarController {
     }
 
     @GetMapping()
+//  http://api-buyer.roddonjai.com/
+//  https://api-buyer.roddonjai.com/api-gateway/buyer/home-page/my-cars
     public ResponseEntity<ApiResponse<List<CarDTO>>> getMyCars() {
         try {
             logger.info("Received request to get all cars");
-            List<CarDTO> flowers = carService.getMyFlowers();
+            List<CarDTO> myCars = carService.getMyCars();
             ApiResponse<List<CarDTO>> response = new ApiResponse<>(
-                    "Flowers retrieved successfully",
-                    flowers,
+                    "Cars retrieved successfully",
+                    myCars,
                     null,
                     "0000"
             );
@@ -53,14 +55,16 @@ public class CarController {
 
 
     @PostMapping
+    //  http://api-buyer.roddonjai.com/
+    //  https://api-buyer.roddonjai.com/api-gateway/seller/car
     public ResponseEntity<ApiResponse<CarDTO>> createCar(@Valid @RequestBody CarCreate request) {
         try {
             logger.info("Received request to create car: {}", request.getName());
-            CarDTO flower = carService.saveCar(request);
-            logger.info("Successfully created car with ID: {}", flower.getId());
+            CarDTO car = carService.saveCar(request);
+            logger.info("Successfully created car with ID: {}", car.getId());
             ApiResponse<CarDTO> response = new ApiResponse<>(
                     "Car created successfully",
-                    flower,
+                    car,
                     null,
                     "0000"
             );

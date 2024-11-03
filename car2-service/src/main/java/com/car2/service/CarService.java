@@ -38,7 +38,7 @@ public class CarService {
         this.carRepository = carRepository;
         this.carImageRepository = carImageRepository;
     }
-     private String currentUserNanme() {
+     private String currentUserName() {
          Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
          String username = null;
          if (authentication instanceof JwtAuthenticationToken) {
@@ -50,12 +50,12 @@ public class CarService {
 
          return username;
      }
-    public List<CarDTO> getMyFlowers() {
+    public List<CarDTO> getMyCars() {
         try {
-            String userName = currentUserNanme();
+            String userName = currentUserName();
             logger.info("Fetching all cars created by: {}", userName);
-            List<Car> flowers = carRepository.findByCreatedBy(userName);
-            return flowers.stream().map(this::convertToDTO).collect(Collectors.toList());
+            List<Car> cars = carRepository.findByCreatedBy(userName);
+            return cars.stream().map(this::convertToDTO).collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Error occurred while fetching cars", e);
             throw new RuntimeException("Failed to fetch cars: " + e.getMessage());
@@ -73,12 +73,15 @@ public class CarService {
             car.setYear(request.getYear());
             car.setColor(request.getColor());
             car.setCreatedDate(LocalDateTime.now());
-            car.setCreatedBy(currentUserNanme());
+            car.setCreatedBy(currentUserName());
             car.setModifiedDate(LocalDateTime.now());
-            car.setModifiedBy(currentUserNanme());
-            Car savedFlower = carRepository.save(car);
-            logger.info("Saved car with ID: {}", savedFlower.getId());
-            return convertToDTO(savedFlower);
+            car.setModifiedBy(currentUserName());
+            Car savedCar = carRepository.save(car);
+//           call aii common service
+            //  https://api-xxx.roddonjai.com/api-gateway/common/xxx-data
+            /// common response data
+            logger.info("Saved car with ID: {}", savedCar.getId());
+            return convertToDTO(savedCar);
         } catch (Exception e) {
             logger.error("Error occurred while saving car: {}", e.getMessage());
             throw new RuntimeException("Failed to save car: " + e.getMessage());
@@ -90,7 +93,7 @@ public class CarService {
     public CarDTO updateCar(Long id, CarUpdateDTO carUpdateDTO) {
         Car car = carRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Car not found with id: " + id));
-        if (!car.getCreatedBy().equals(currentUserNanme())) {
+        if (!car.getCreatedBy().equals(currentUserName())) {
             throw new RuntimeException("You are not authorized to delete this car");
         }
         car.setName(carUpdateDTO.getName());
@@ -100,7 +103,7 @@ public class CarService {
         car.setModel(carUpdateDTO.getModel());
         car.setYear(carUpdateDTO.getYear());
         car.setColor(carUpdateDTO.getColor());
-        car.setModifiedBy(currentUserNanme());
+        car.setModifiedBy(currentUserName());
         car.setModifiedDate(LocalDateTime.now());
         car = carRepository.save(car);
         return convertToDTO(car);
@@ -111,7 +114,7 @@ public class CarService {
         try {
             Car car = carRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Flower not found with id: " + id));
-            if (!car.getCreatedBy().equals(currentUserNanme())) {
+            if (!car.getCreatedBy().equals(currentUserName())) {
                 throw new RuntimeException("You are not authorized to delete this car");
             }
             carRepository.delete(car);
@@ -125,8 +128,6 @@ public class CarService {
     public CarImageDTO saveCarImage(Long carId, byte[] imageData) {
         try {
             // Get current authenticated user
-
-
             logger.info("Saving new car image for car ID: {}", carId);
             CarImage carImage = new CarImage();
             carImage.setCarId(carId);
